@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Term Project Map G3 Analysis</title>
+    <!-- Modern, clean, geometric font for a Gen Z tech vibe -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        genz: {
+                            dark: '#0B0F19',
+                            cardDark: '#131C31',
+                            purple: '#8b5cf6',
+                            pink: '#ec4899',
+                            cyan: '#06b6d4',
+                            lime: '#a3e635'
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            transition: background-color 0.5s ease, color 0.5s ease; 
+        }
+        
+        /* Language Toggle Logic */
+        .lang-zh { display: none; }
+        .show-zh .lang-zh { display: block; }
+        .show-zh .lang-en { display: none; }
+        .show-zh span.lang-zh { display: inline; }
+        .show-zh span.lang-en { display: none; }
+        
+        /* SVG Custom Styling */
+        .axis-line { stroke: #94a3b8; stroke-width: 3; stroke-linecap: round; marker-end: url(#arrowhead); }
+        .dark .axis-line { stroke: #475569; marker-end: url(#arrowhead-dark); }
+        
+        .axis-label { font-size: 13px; font-weight: 800; fill: #64748b; text-transform: uppercase; letter-spacing: 0.05em; text-anchor: middle; }
+        .dark .axis-label { fill: #94a3b8; }
+        
+        .company-node { cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; -webkit-user-select: none; }
+        .company-node:hover { transform: translateY(-3px); filter: drop-shadow(0 8px 12px rgba(0,0,0,0.15)); }
+        
+        .movement-arrow { stroke: url(#gradient-pink); stroke-width: 4; stroke-dasharray: 6,6; stroke-linecap: round; marker-end: url(#arrowhead-red); fill: none; animation: dash 20s linear infinite; }
+        
+        @keyframes dash {
+            to { stroke-dashoffset: -1000; }
+        }
+
+        /* Glassmorphism Utilities */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .dark .glass {
+            background: rgba(19, 28, 49, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-genz-dark dark:text-slate-100 min-h-screen font-sans antialiased relative overflow-x-hidden transition-colors duration-500">
+
+    <!-- Ambient Background Blobs -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-30 dark:opacity-20 animate-blob"></div>
+        <div class="absolute top-[20%] right-[-10%] w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-30 dark:opacity-20 animate-blob" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-[-10%] left-[20%] w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-30 dark:opacity-20 animate-blob" style="animation-delay: 4s;"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto p-4 md:p-8 xl:p-12">
+        
+        <!-- Header & Controls -->
+        <div class="glass flex flex-col md:flex-row justify-between items-center mb-10 gap-6 p-6 rounded-[2rem] shadow-xl">
+            <div class="text-center md:text-left">
+                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">
+                    Term Project Map 
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-genz-purple via-genz-pink to-orange-400">G3</span>
+                </h1>
+                <p class="text-sm md:text-base text-slate-500 dark:text-slate-400 font-medium">
+                    <span class="lang-en">Strategic repositioning based on Market Range & Technological Base</span>
+                    <span class="lang-zh">基於市場範圍與技術基礎的策略重新定位</span>
+                </p>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mt-2 font-semibold tracking-wide">
+                    G3 Vicky (112212060) 國企三
+                </p>
+            </div>
+            
+            <div class="flex gap-4">
+                <button onclick="toggleLanguage()" class="px-6 py-3 text-sm font-bold rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5">
+                    <span class="lang-en">🌐 切換至中文</span>
+                    <span class="lang-zh">🌐 View English</span>
+                </button>
+                <button onclick="toggleTheme()" class="p-3 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg hover:shadow-purple-500/30 transition-all hover:-translate-y-0.5 hover:scale-105" aria-label="Toggle Dark Mode">
+                    <!-- Sun Icon -->
+                    <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <!-- Moon Icon -->
+                    <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Maps Container -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-10">
+            
+            <!-- ORIGINAL MAP -->
+            <div class="glass p-6 md:p-8 rounded-[2.5rem] shadow-xl flex flex-col items-center relative group">
+                <div class="absolute inset-0 border-2 border-transparent group-hover:border-slate-200 dark:group-hover:border-slate-700 rounded-[2.5rem] transition-colors pointer-events-none"></div>
+                <h2 class="text-xl font-extrabold mb-6 text-slate-700 dark:text-slate-200">
+                    <span class="lang-en">Original Concept</span>
+                    <span class="lang-zh">原始概念定位圖</span>
+                </h2>
+                
+                <div class="w-full max-w-[500px] aspect-square relative">
+                    <svg viewBox="0 0 500 500" class="w-full h-full overflow-visible">
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#94a3b8" />
+                            </marker>
+                            <marker id="arrowhead-dark" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#475569" />
+                            </marker>
+                        </defs>
+                        
+                        <!-- Axes -->
+                        <line x1="40" y1="250" x2="460" y2="250" class="axis-line" />
+                        <line x1="250" y1="460" x2="250" y2="40" class="axis-line" />
+                        <line x1="460" y1="250" x2="40" y2="250" class="axis-line" />
+                        <line x1="250" y1="40" x2="250" y2="460" class="axis-line" />
+                        
+                        <!-- Labels -->
+                        <text x="250" y="20" class="axis-label">International</text>
+                        <text x="250" y="490" class="axis-label">National</text>
+                        <text x="30" y="275" class="axis-label" style="text-anchor: start;">Traditional Tech</text>
+                        <text x="470" y="275" class="axis-label" style="text-anchor: end;">Advanced Tech</text>
+                        
+                        <!-- G2 EVA AIR (Lime) -->
+                        <g transform="translate(140, 150)">
+                            <g class="company-node" onclick="openModal('EVA')">
+                                <rect x="-35" y="-16" width="70" height="32" rx="16" fill="#84cc16" opacity="0.15"/>
+                                <text x="0" y="5" font-weight="800" font-size="12" fill="#4d7c0f" class="dark:fill-[#a3e635]" text-anchor="middle">EVA AIR</text>
+                            </g>
+                        </g>
+
+                        <!-- G6 TOYOTA (Rose) -->
+                        <g transform="translate(210, 160)">
+                            <g class="company-node" onclick="openModal('TOYOTA')">
+                                <rect x="-40" y="-16" width="80" height="32" rx="16" fill="#f43f5e" opacity="0.15"/>
+                                <text x="0" y="5" font-weight="800" font-size="12" fill="#be123c" class="dark:fill-[#fb7185]" text-anchor="middle">TOYOTA</text>
+                            </g>
+                        </g>
+
+                        <!-- G7 FPC (Sky Blue) -->
+                        <g transform="translate(180, 210)">
+                            <g class="company-node" onclick="openModal('FPC')">
+                                <rect x="-30" y="-16" width="60" height="32" rx="16" fill="#0ea5e9" opacity="0.15"/>
+                                <text x="0" y="5" font-weight="800" font-size="12" fill="#0369a1" class="dark:fill-[#38bdf8]" text-anchor="middle">FPC</text>
+                            </g>
+                        </g>
+
+                        <!-- G1 FCFC (Purple) -->
+                        <g transform="translate(170, 250)">
+                            <g class="company-node" onclick="openModal('FCFC')">
+                                <circle cx="0" cy="0" r="20" fill="#8b5cf6" opacity="0.2"/>
+                                <text x="0" y="4" font-weight="800" font-size="11" fill="#5b21b6" class="dark:fill-[#a78bfa]" text-anchor="middle">FCFC</text>
+                            </g>
+                        </g>
+
+                        <!-- G3 KURA (Orange) -->
+                        <g transform="translate(120, 330)">
+                            <g class="company-node" onclick="openModal('KURA')">
+                                <rect x="-30" y="-16" width="60" height="32" rx="16" fill="#f97316" opacity="0.15"/>
+                                <text x="0" y="5" font-weight="800" font-size="12" fill="#c2410c" class="dark:fill-[#fb923c]" text-anchor="middle">KURA</text>
+                            </g>
+                        </g>
+
+                        <!-- G4 ASUS (Cyan) -->
+                        <g transform="translate(300, 140)">
+                            <g class="company-node" onclick="openModal('ASUS')">
+                                <rect x="-35" y="-16" width="70" height="32" rx="16" fill="#06b6d4" opacity="0.15"/>
+                                <text x="0" y="5" font-weight="800" font-size="12" fill="#0e7490" class="dark:fill-[#22d3ee]" text-anchor="middle">ASUS</text>
+                            </g>
+                        </g>
+
+                        <!-- G5 AVC (Emerald) -->
+                        <g transform="translate(380, 190)">
+                            <g class="company-node" onclick="openModal('AVC')">
+                                <rect x="-30" y="-16" width="60" height="32" rx="16" fill="#10b981" opacity="0.15"/>
+                                <text x="0" y="5" font-weight="800" font-size="12" fill="#047857" class="dark:fill-[#34d399]" text-anchor="middle">AVC</text>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- SUGGESTED MAP -->
+            <div class="glass p-6 md:p-8 rounded-[2.5rem] shadow-2xl flex flex-col items-center relative overflow-hidden group">
+                <!-- Glowing Border Effect for Refined Map -->
+                <div class="absolute inset-0 bg-gradient-to-br from-pink-500/20 via-purple-500/20 to-cyan-500/20 pointer-events-none"></div>
+                <div class="absolute inset-[1px] bg-slate-50 dark:bg-genz-cardDark rounded-[2.5rem] pointer-events-none opacity-90 dark:opacity-95"></div>
+                
+                <div class="absolute top-6 right-6 bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-widest shadow-lg uppercase z-10">
+                    <span class="lang-en">Recommended</span>
+                    <span class="lang-zh">建議調整</span>
+                </div>
+                
+                <h2 class="text-xl font-extrabold mb-6 text-slate-700 dark:text-slate-200 z-10 relative">
+                    <span class="lang-en">Refined Strategy Map</span>
+                    <span class="lang-zh">修正後策略定位圖</span>
+                </h2>
+                
+                <div class="w-full max-w-[500px] aspect-square relative z-10">
+                    <svg viewBox="0 0 500 500" class="w-full h-full overflow-visible">
+                        <defs>
+                            <linearGradient id="gradient-pink" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ec4899" />
+                                <stop offset="100%" stop-color="#8b5cf6" />
+                            </linearGradient>
+                            <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#ec4899" />
+                            </marker>
+                        </defs>
+                        
+                        <!-- Axes -->
+                        <line x1="40" y1="250" x2="460" y2="250" class="axis-line" />
+                        <line x1="250" y1="460" x2="250" y2="40" class="axis-line" />
+                        <line x1="460" y1="250" x2="40" y2="250" class="axis-line" />
+                        <line x1="250" y1="40" x2="250" y2="460" class="axis-line" />
+                        
+                        <!-- Labels -->
+                        <text x="250" y="20" class="axis-label">International</text>
+                        <text x="250" y="490" class="axis-label">National</text>
+                        <text x="30" y="275" class="axis-label" style="text-anchor: start;">Traditional Tech</text>
+                        <text x="470" y="275" class="axis-label" style="text-anchor: end;">Advanced Tech</text>
+
+                        <!-- Movement Arrows (Background) -->
+                        <path d="M 170 250 Q 185 200 200 165" class="movement-arrow" /> <!-- FCFC -->
+                        <path d="M 120 330 Q 160 260 190 205" class="movement-arrow" /> <!-- KURA -->
+                        <path d="M 210 160 Q 220 155 225 155" class="movement-arrow" /> <!-- TOYOTA -->
+                        
+                        <!-- G2 EVA AIR (Same) -->
+                        <g transform="translate(140, 150)">
+                            <g class="company-node" onclick="openModal('EVA')">
+                                <rect x="-35" y="-16" width="70" height="32" rx="16" fill="#84cc16" opacity="0.15"/>
+                                <text x="0" y="5" font-weight="800" font-size="12" fill="#4d7c0f" class="dark:fill-[#a3e635]" text-anchor="middle">EVA AIR</text>
+                            </g>
+                        </g>
+
+                        <!-- G6 TOYOTA (Moved Right) -->
+                        <g transform="translate(240, 155)">
+                            <g class="company-node" onclick="openModal('TOYOTA')">
+                                <rect x="-40" y="-16" width="80" height="32" rx="16" fill="#f43f5e" opacity="0.15"/>
+                                <text x="0" y="5" font-weight="800" font-size="12" fill="#be123c" class="dark:fill-[#fb7185]" text-anchor="middle">TOYOTA</text>
+                            </g>
+                        </g>
+
+                        <!-- G7 FPC (Same) -->
+                        <g transform="translate(170, 190)">
+                            <g class="company-node" onclick="openModal('FPC')">
+                                <rect x="-30" y="-16" width="60" height="32" rx="16" fill="#0ea5e9" opacity="0.15"/>
+                                <text x="0" y="5" font-weight="800" font-size="12" fill="#0369a1" class="dark:fill-[#38bdf8]" text-anchor="middle">FPC</text>
+                            </g>
+                        </g>
+
+                        <!-- G1 FCFC (Moved UP) -->
+                        <g transform="translate(210, 160)">
+                            <g class="company-node" onclick="openModal('FCFC')">
+                                <circle cx="0" cy="0" r="20" fill="#8b5cf6" opacity="0.25"/>
+                                <text x="0" y="4" font-weight="800" font-size="11" fill="#5b21b6" class="dark:fill-[#a78bfa]" text-anchor="middle">FCFC</text>
+                            </g>
+                        </g>
+
+                        <!-- G3 KURA (Moved UP & RIGHT) -->
+                        <g transform="translate(200, 200)">
+                            <g class="company-node" onclick="openModal('KURA')">
+                                <rect x="-30" y="-16" width="60" height="32" rx="16" fill="#f97316" opacity="0.2"/>
+                                <text x="0" y="5" font-weight="800" font-size="12" fill="#c2410c" class="dark:fill-[#fb923c]" text-anchor="middle">KURA</text>
+                            </g>
+                        </g>
+
+                        <!-- G4 ASUS (Same) -->
+                        <g transform="translate(320, 120)">
+                            <g class="company-node" onclick="openModal('ASUS')">
+                                <rect x="-35" y="-16" width="70" height="32" rx="16" fill="#06b6d4" opacity="0.15"/>
+                                <text x="0" y="5" font-weight="800" font-size="12" fill="#0e7490" class="dark:fill-[#22d3ee]" text-anchor="middle">ASUS</text>
+                            </g>
+                        </g>
+
+                        <!-- G5 AVC (Same) -->
+                        <g transform="translate(380, 170)">
+                            <g class="company-node" onclick="openModal('AVC')">
+                                <rect x="-30" y="-16" width="60" height="32" rx="16" fill="#10b981" opacity="0.15"/>
+                                <text x="0" y="5" font-weight="800" font-size="12" fill="#047857" class="dark:fill-[#34d399]" text-anchor="middle">AVC</text>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analysis Section -->
+        <div class="glass p-8 md:p-10 rounded-[2.5rem] shadow-xl">
+            <h3 class="text-2xl font-extrabold mb-8 flex items-center gap-3">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-white shadow-lg shadow-purple-500/30">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </span>
+                <span class="lang-en text-transparent bg-clip-text bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400">Key Adjustments & Rationale</span>
+                <span class="lang-zh text-transparent bg-clip-text bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400">主要調整與理由</span>
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- FCFC -->
+                <div class="bg-white/50 dark:bg-slate-800/50 rounded-3xl p-6 border border-slate-200/50 dark:border-slate-700/50 relative overflow-hidden group hover:-translate-y-1 transition-transform">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-genz-purple"></div>
+                    <h4 class="font-bold text-xl mb-3 pl-4 flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-genz-purple shadow-[0_0_10px_rgba(139,92,246,0.8)]"></span>
+                        G1 - FCFC
+                    </h4>
+                    <div class="lang-en text-slate-600 dark:text-slate-300 pl-4 leading-relaxed">
+                        <p class="mb-2"><strong class="text-slate-800 dark:text-white">Action:</strong> Move significantly UP.</p>
+                        <p>FCFC is a massive multinational heavily reliant on global exports. It should sit high in the "International" quadrant, closely tracking alongside FPC.</p>
+                    </div>
+                    <div class="lang-zh text-slate-600 dark:text-slate-300 pl-4 leading-relaxed">
+                        <p class="mb-2"><strong class="text-slate-800 dark:text-white">建議：</strong>在 Y 軸上大幅向上移動。</p>
+                        <p>台化（FCFC）是一家高度依賴全球出口的大型跨國企業。它應該與台塑（FPC）一起被放置在「國際範圍」的高位。</p>
+                    </div>
+                </div>
+
+                <!-- Kura Sushi -->
+                <div class="bg-white/50 dark:bg-slate-800/50 rounded-3xl p-6 border border-slate-200/50 dark:border-slate-700/50 relative overflow-hidden group hover:-translate-y-1 transition-transform">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-orange-500"></div>
+                    <h4 class="font-bold text-xl mb-3 pl-4 flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.8)]"></span>
+                        G3 - Kura Sushi
+                    </h4>
+                    <div class="lang-en text-slate-600 dark:text-slate-300 pl-4 leading-relaxed">
+                        <p class="mb-2"><strong class="text-slate-800 dark:text-white">Action:</strong> Move UP & slightly RIGHT.</p>
+                        <p>As a Japanese multinational, its scope is highly global. Their heavy reliance on operational tech (sushi robots, automated belts, RFID tracking) makes them noticeably more advanced than traditional food service.</p>
+                    </div>
+                    <div class="lang-zh text-slate-600 dark:text-slate-300 pl-4 leading-relaxed">
+                        <p class="mb-2"><strong class="text-slate-800 dark:text-white">建議：</strong>向上移動並微向右移。</p>
+                        <p>作為跨國企業，其國際化程度極高。他們大量使用自動化技術（壽司機器人、自動化輸送帶、RFID追蹤），使其比傳統餐飲更偏向「先進技術」。</p>
+                    </div>
+                </div>
+
+                <!-- TOYOTA -->
+                <div class="bg-white/50 dark:bg-slate-800/50 rounded-3xl p-6 border border-slate-200/50 dark:border-slate-700/50 relative overflow-hidden group hover:-translate-y-1 transition-transform">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-genz-pink"></div>
+                    <h4 class="font-bold text-xl mb-3 pl-4 flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-genz-pink shadow-[0_0_10px_rgba(236,72,153,0.8)]"></span>
+                        G6 - TOYOTA
+                    </h4>
+                    <div class="lang-en text-slate-600 dark:text-slate-300 pl-4 leading-relaxed">
+                        <p class="mb-2"><strong class="text-slate-800 dark:text-white">Action:</strong> Shift slightly RIGHT.</p>
+                        <p>Toyota bridges the gap between traditional heavy industry and advanced tech through their leadership in hybrid technology, solid-state battery R&D, and autonomous driving AI.</p>
+                    </div>
+                    <div class="lang-zh text-slate-600 dark:text-slate-300 pl-4 leading-relaxed">
+                        <p class="mb-2"><strong class="text-slate-800 dark:text-white">建議：</strong>稍微向右移向先進技術。</p>
+                        <p>豐田透過在混合動力技術、固態電池研發和自動駕駛 AI 的領先地位，跨越了傳統重工業與先進科技之間的界線。</p>
+                    </div>
+                </div>
+
+                <!-- Spot On Placements -->
+                <div class="bg-gradient-to-br from-lime-400/10 to-emerald-500/10 rounded-3xl p-6 border border-lime-500/30 dark:border-lime-500/20 relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-lime-400 to-emerald-500"></div>
+                    <h4 class="font-bold text-xl mb-3 pl-4 text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        <span class="lang-en">Spot-On Placements</span>
+                        <span class="lang-zh">定位精確 (無需更改)</span>
+                    </h4>
+                    <p class="lang-en text-emerald-800/80 dark:text-emerald-200/80 pl-4 leading-relaxed">
+                        <strong class="text-emerald-900 dark:text-emerald-100">ASUS (G4) & AVC (G5):</strong> Perfectly placed in Advanced Tech / International.<br><br>
+                        <strong class="text-emerald-900 dark:text-emerald-100">EVA AIR (G2) & FPC (G7):</strong> Accurately placed as large-scale traditional international enterprises.
+                    </p>
+                    <p class="lang-zh text-emerald-800/80 dark:text-emerald-200/80 pl-4 leading-relaxed">
+                        <strong class="text-emerald-900 dark:text-emerald-100">華碩 ASUS (G4) & 奇鋐 AVC (G5):</strong> 完美地位於先進技術與國際化象限。<br><br>
+                        <strong class="text-emerald-900 dark:text-emerald-100">長榮航空 EVA AIR (G2) & 台塑 FPC (G7):</strong> 準確定位為大型傳統國際企業。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Company Modal -->
+    <div id="companyModal" class="fixed inset-0 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onclick="closeModal()"></div>
+        
+        <!-- Modal Content -->
+        <div class="glass relative w-11/12 max-w-lg p-8 md:p-10 rounded-[2.5rem] shadow-2xl transform scale-95 transition-transform duration-300" id="modalContent">
+            <button onclick="closeModal()" class="absolute top-5 right-5 p-2 rounded-full bg-slate-200/50 dark:bg-slate-700/50 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors backdrop-blur-md">
+                <svg class="w-5 h-5 text-slate-700 dark:text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <div class="mb-6">
+                <h3 id="modalTitle" class="text-3xl font-extrabold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-genz-purple to-genz-pink">Company Name</h3>
+                <span id="modalPosition" class="inline-block px-4 py-1.5 text-xs md:text-sm font-bold tracking-wide rounded-full bg-white/60 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 uppercase shadow-sm">
+                    Position Quadrant
+                </span>
+            </div>
+            
+            <div class="text-slate-600 dark:text-slate-300 leading-relaxed text-base md:text-lg">
+                <p id="modalDescEn" class="lang-en">English description.</p>
+                <p id="modalDescZh" class="lang-zh">中文描述。</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Company Data for Modal
+        const companyData = {
+            'FCFC': {
+                name: 'G1 - FCFC (台化)',
+                position: 'Traditional Tech / International',
+                descEn: 'Formosa Chemicals & Fibre Corp. is a massive global player in the petrochemical and plastics industry. Highly traditional operations but operates on a vast international scale.',
+                descZh: '台灣化學纖維（台化）是全球石化和塑膠產業的巨頭。營運模式偏向傳統重工業，但在國際市場上擁有龐大的規模與影響力。'
+            },
+            'EVA': {
+                name: 'G2 - EVA Air (長榮航空)',
+                position: 'Traditional Tech / International',
+                descEn: 'A major Taiwanese international airline operating passenger and dedicated cargo services to over 40 global destinations. Represents a classic traditional service industry with global reach.',
+                descZh: '台灣主要的國際航空公司，提供飛往全球40多個目的地的客運和貨運服務。代表了具有廣泛全球影響力的經典傳統服務業。'
+            },
+            'KURA': {
+                name: 'G3 - Kura Sushi (藏壽司)',
+                position: 'Traditional -> Advanced / International',
+                descEn: 'A Japanese revolving sushi chain. While food service is traditional, Kura heavily integrates automation globally (sushi robots, automated belts, RFID tracking), pushing it toward Advanced Tech.',
+                descZh: '日本知名迴轉壽司連鎖店。雖然餐飲屬於傳統服務業，但藏壽司在全球大量導入自動化技術（壽司機器人、自動化輸送帶、RFID追蹤），使其向先進科技靠攏。'
+            },
+            'ASUS': {
+                name: 'G4 - ASUS (華碩電腦)',
+                position: 'Advanced Tech / International',
+                descEn: 'A global multinational computer hardware, consumer electronics, and AI technology company. A perfect fit for the advanced tech and international market quadrant.',
+                descZh: '全球跨國電腦硬體、消費性電子與人工智慧科技公司。完美契合先進科技與國際市場的象限。'
+            },
+            'AVC': {
+                name: 'G5 - AVC (奇鋐科技)',
+                position: 'Advanced Tech / International',
+                descEn: 'Asia Vital Components (AVC) is a leading global provider of advanced thermal management solutions (cooling systems) essential for modern servers, PCs, and electronics worldwide.',
+                descZh: '奇鋐科技（AVC）是全球領先的先進散熱解決方案供應商，其產品對於全球現代伺服器、個人電腦和電子產品至關重要。'
+            },
+            'TOYOTA': {
+                name: 'G6 - TOYOTA (豐田汽車)',
+                position: 'Traditional -> Advanced / International',
+                descEn: 'A global automotive manufacturer. Originally a traditional heavy industry, Toyota is rapidly shifting rightward by investing heavily in hybrid tech, solid-state batteries, and AI autonomous driving.',
+                descZh: '全球汽車製造商。豐田原屬於傳統重工業，但正透過大量投資混合動力技術、固態電池和 AI 自動駕駛，迅速向右方（先進技術）轉型。'
+            },
+            'FPC': {
+                name: 'G7 - FPC (台塑)',
+                position: 'Traditional Tech / International',
+                descEn: 'Formosa Plastics Corp. is a massive global producer of PVC resins and other petrochemicals. A cornerstone example of a traditional, capital-intensive industry operating globally.',
+                descZh: '台灣塑膠工業（台塑）是全球巨型的 PVC 樹脂及其他石化產品製造商。是資本密集型傳統產業在全球營運的經典範例。'
+            }
+        };
+
+        // Modal Logic
+        function openModal(companyId) {
+            const data = companyData[companyId];
+            if(!data) return;
+
+            // Populate text
+            document.getElementById('modalTitle').textContent = data.name;
+            document.getElementById('modalPosition').textContent = data.position;
+            document.getElementById('modalDescEn').textContent = data.descEn;
+            document.getElementById('modalDescZh').textContent = data.descZh;
+
+            const modal = document.getElementById('companyModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            // Show modal
+            modal.classList.remove('hidden');
+            // Trigger browser reflow
+            void modal.offsetWidth;
+            
+            // Animate in
+            modal.classList.remove('opacity-0');
+            modalContent.classList.remove('scale-95');
+            modalContent.classList.add('scale-100');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('companyModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            // Animate out
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            
+            // Hide after transition
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); // matches duration-300
+        }
+
+        // Language Toggle Logic
+        let isZh = false;
+        function toggleLanguage() {
+            isZh = !isZh;
+            if (isZh) {
+                document.body.classList.add('show-zh');
+            } else {
+                document.body.classList.remove('show-zh');
+            }
+        }
+
+        // Dark Mode Toggle Logic
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+        }
+        
+        // Respect system preference on initial load
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</body>
+</html>
